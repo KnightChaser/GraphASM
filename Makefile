@@ -23,7 +23,7 @@ OBJS         := \
 
 .PHONY: all clean
 
-all: graph
+all: graphasm
 
 # Ensure build directory exists
 $(OBJDIR):
@@ -68,9 +68,9 @@ $(OBJDIR)/stack_utils.o: $(STACK_DIR)/stack_utils.asm $(STACK_DIR)/structs.inc |
 # 	$(ASM) $(ASMFLAGS) $< -o $@
 
 # Link everything into final binary
-graph: $(OBJS)
+graphasm: $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 clean:
-	rm -rf $(OBJDIR) graph
+	rm -rf $(OBJDIR) graphasm
 

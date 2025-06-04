@@ -1,3 +1,5 @@
+# Build artifacts
 *.o
 *.out
 build
+graphasm
