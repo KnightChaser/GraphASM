@@ -19,7 +19,9 @@ OBJS         := \
     $(OBJDIR)/stack_create.o   \
     $(OBJDIR)/stack_pop.o      \
     $(OBJDIR)/stack_push.o     \
-    $(OBJDIR)/stack_utils.o
+    $(OBJDIR)/stack_utils.o    \
+		$(OBJDIR)/graph_create.o   \
+
 
 .PHONY: all clean
 
@@ -58,6 +60,10 @@ $(OBJDIR)/stack_push.o: $(STACK_DIR)/stack_push.asm $(STACK_DIR)/structs.inc | $
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 $(OBJDIR)/stack_utils.o: $(STACK_DIR)/stack_utils.asm $(STACK_DIR)/structs.inc | $(OBJDIR)
+	$(ASM) $(ASMFLAGS) $< -o $@
+
+# Assemble Graph modules
+$(OBJDIR)/graph_create.o: $(GRAPH_DIR)/graph_create.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 # # Assemble Graph modules (BFS/DFS placeholders)

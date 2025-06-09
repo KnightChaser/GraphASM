@@ -24,7 +24,21 @@ extern int queue_is_empty(Queue *q);
 extern void queue_print(Queue *q);
 extern void queue_destroy(Queue *q);
 
+// 3) Graph
+typedef struct Graph Graph;
+extern Graph *graph_create(int64_t numVertices);
+
 int main(int argc, char *argv[]) {
-    printf("Hello, World!\n");
+    // Create the graph
+    int numVertices = 10;
+    Graph *g = graph_create(numVertices);
+    if (!g) {
+        fprintf(stderr, "Failed to create graph\n");
+        return EXIT_FAILURE;
+    }
+    printf("Graph with %ld vertices created at %p\n",
+           (long)*(int64_t *)((char *)g), // graph.numVertices RESB 1
+           g);
+
     return EXIT_SUCCESS;
 }
