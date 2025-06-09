@@ -48,6 +48,30 @@ void addEdge(Graph *graph, int src, int dest) {
     graph->adjLists[dest] = node;
 }
 
+// Remove edge (start, end) from the graph
+bool removeDirectedEdge(Graph *graph, int source, int destination) {
+    Node **pp = &graph->adjLists[source];
+    while (*pp) {
+        Node *current = *pp;
+        if (current->vertex == destination) {
+            *pp = current->next; // Remove the node
+            free(current);
+            return true;
+        } else {
+            pp = &current->next; // Move to the next node
+        }
+    }
+    return false; // Edge not found
+}
+
+// Remove edge (start, end) from the graph (undirected)
+bool removeEdge(Graph *graph, int source, int destination) {
+    bool removed = false;
+    removed |= removeDirectedEdge(graph, source, destination);
+    removed |= removeDirectedEdge(graph, destination, source);
+    return removed;
+}
+
 // The DFS routine
 void dfs(Graph *graph, int vertex) {
     graph->visited[vertex] = true;
@@ -68,14 +92,16 @@ int main(int argc, char *argv[]) {
          |
          5
     */
-    Graph *g = createGraph(6);
-    addEdge(g, 0, 1);
-    addEdge(g, 0, 3);
-    addEdge(g, 1, 2);
-    addEdge(g, 1, 4);
-    addEdge(g, 3, 4);
-    addEdge(g, 4, 5);
+    Graph *graph = createGraph(6);
+    addEdge(graph, 0, 1);
+    addEdge(graph, 0, 3);
+    addEdge(graph, 1, 2);
+    addEdge(graph, 1, 4);
+    addEdge(graph, 3, 4);
+    addEdge(graph, 4, 5);
+    removeEdge(graph, 1, 4);
+    addEdge(graph, 4, 1); // Re-add edge to demonstrate undirected nature
 
-    dfs(g, 0); // Start DFS from vertex 0
+    dfs(graph, 0); // Start DFS from vertex 0
     return 0;
 }

@@ -95,6 +95,30 @@ void addEdge(Graph *graph, int source, int destination) {
     graph->adjLists[destination] = newNode;
 }
 
+// Remove edge (start, end) from the graph
+bool removeDirectedEdge(Graph *graph, int source, int destination) {
+    Node **pp = &graph->adjLists[source];
+    while (*pp) {
+        Node *current = *pp;
+        if (current->vertex == destination) {
+            *pp = current->next; // Remove the node
+            free(current);
+            return true;
+        } else {
+            pp = &current->next; // Move to the next node
+        }
+    }
+    return false; // Edge not found
+}
+
+// Remove edge (start, end) from the graph (undirected)
+bool removeEdge(Graph *graph, int source, int destination) {
+    bool removed = false;
+    removed |= removeDirectedEdge(graph, source, destination);
+    removed |= removeDirectedEdge(graph, destination, source);
+    return removed;
+}
+
 void bfs(Graph *graph, int startVertex) {
     Queue *q = createQueue();
     graph->visited[startVertex] = true;
@@ -135,6 +159,8 @@ int main(int argc, char *argv[]) {
     addEdge(graph, 1, 4);
     addEdge(graph, 3, 4);
     addEdge(graph, 4, 5);
+    removeEdge(graph, 1, 4);
+    addEdge(graph, 4, 1); // Re-add edge to demonstrate undirected nature
 
     bfs(graph, 0); // Start BFS from vertex 0
     return 0;
