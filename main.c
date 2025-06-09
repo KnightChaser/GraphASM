@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -27,6 +28,7 @@ extern void queue_destroy(Queue *q);
 // 3) Graph
 typedef struct Graph Graph;
 extern Graph *graph_create(int64_t numVertices);
+extern void graph_add_edge(Graph *g, int64_t src, int64_t dest);
 
 int main(int argc, char *argv[]) {
     // Create the graph
@@ -39,6 +41,10 @@ int main(int argc, char *argv[]) {
     printf("Graph with %ld vertices created at %p\n",
            (long)*(int64_t *)((char *)g), // graph.numVertices RESB 1
            g);
+
+    graph_add_edge(g, 0, 1);
+    graph_add_edge(g, 2, 3);
+    graph_add_edge(g, 1, 2);
 
     return EXIT_SUCCESS;
 }

@@ -12,15 +12,16 @@ GRAPH_DIR    := $(SRCDIR)/graph
 OBJDIR       := build
 OBJS         := \
     $(OBJDIR)/main.o \
-    $(OBJDIR)/queue_create.o   \
-    $(OBJDIR)/queue_dequeue.o  \
-    $(OBJDIR)/queue_enqueue.o  \
-    $(OBJDIR)/queue_utils.o    \
-    $(OBJDIR)/stack_create.o   \
-    $(OBJDIR)/stack_pop.o      \
-    $(OBJDIR)/stack_push.o     \
-    $(OBJDIR)/stack_utils.o    \
-		$(OBJDIR)/graph_create.o   \
+    $(OBJDIR)/queue_create.o    \
+    $(OBJDIR)/queue_dequeue.o   \
+    $(OBJDIR)/queue_enqueue.o   \
+    $(OBJDIR)/queue_utils.o     \
+    $(OBJDIR)/stack_create.o    \
+    $(OBJDIR)/stack_pop.o       \
+    $(OBJDIR)/stack_push.o      \
+    $(OBJDIR)/stack_utils.o     \
+		$(OBJDIR)/graph_create.o    \
+		$(OBJDIR)/graph_add_edge.o  \
 
 
 .PHONY: all clean
@@ -64,6 +65,9 @@ $(OBJDIR)/stack_utils.o: $(STACK_DIR)/stack_utils.asm $(STACK_DIR)/structs.inc |
 
 # Assemble Graph modules
 $(OBJDIR)/graph_create.o: $(GRAPH_DIR)/graph_create.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
+	$(ASM) $(ASMFLAGS) $< -o $@
+
+$(OBJDIR)/graph_add_edge.o: $(GRAPH_DIR)/graph_add_edge.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 # # Assemble Graph modules (BFS/DFS placeholders)
