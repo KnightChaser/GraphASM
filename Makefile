@@ -23,6 +23,7 @@ OBJS         := \
 		$(OBJDIR)/graph_create.o      \
 		$(OBJDIR)/graph_add_edge.o    \
 		$(OBJDIR)/graph_remove_edge.o \
+		$(OBJDIR)/graph_bfs.o         \
 
 
 .PHONY: all clean
@@ -72,6 +73,9 @@ $(OBJDIR)/graph_add_edge.o: $(GRAPH_DIR)/graph_add_edge.asm $(GRAPH_DIR)/structs
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 $(OBJDIR)/graph_remove_edge.o: $(GRAPH_DIR)/graph_remove_edge.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
+	$(ASM) $(ASMFLAGS) $< -o $@
+
+$(OBJDIR)/graph_bfs.o: $(GRAPH_DIR)/graph_bfs.asm $(GRAPH_DIR)/structs.inc $(QUEUE_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 # # Assemble Graph modules (BFS/DFS placeholders)
