@@ -83,6 +83,23 @@ void dfs(Graph *graph, int vertex) {
     }
 }
 
+void printGraph(Graph *graph) {
+    for (int v = 0; v < graph->numVertices; v++) {
+        // Print the list header
+        printf("[%d] -> ", v);
+
+        // Walk the adjacency list
+        Node *cur = graph->adjLists[v];
+        while (cur) {
+            printf("%d -> ", cur->vertex);
+            cur = cur->next;
+        }
+
+        // End with NULL
+        printf("NULL\n");
+    }
+}
+
 int main(int argc, char *argv[]) {
     /*
      Example graph:
@@ -102,6 +119,10 @@ int main(int argc, char *argv[]) {
     removeEdge(graph, 1, 4);
     addEdge(graph, 4, 1); // Re-add edge to demonstrate undirected nature
 
+    printf("\n");
     dfs(graph, 0); // Start DFS from vertex 0
+
+    printf("\n");
+    printGraph(graph); // Print the graph structure
     return 0;
 }
