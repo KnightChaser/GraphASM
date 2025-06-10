@@ -23,6 +23,7 @@ OBJS         := \
 		$(OBJDIR)/graph_add_edge.o    \
 		$(OBJDIR)/graph_bfs.o         \
 		$(OBJDIR)/graph_create.o      \
+		$(OBJDIR)/graph_dfs.o         \
 		$(OBJDIR)/graph_print.o       \
 		$(OBJDIR)/graph_remove_edge.o \
 
@@ -75,6 +76,10 @@ $(OBJDIR)/graph_bfs.o: $(GRAPH_DIR)/graph_bfs.asm $(GRAPH_DIR)/structs.inc $(QUE
 
 $(OBJDIR)/graph_create.o: $(GRAPH_DIR)/graph_create.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
+
+$(OBJDIR)/graph_dfs.o: $(GRAPH_DIR)/graph_dfs.asm $(GRAPH_DIR)/structs.inc $(STACK_DIR)/structs.inc | $(OBJDIR)
+	$(ASM) $(ASMFLAGS) $< -o $@
+
 
 $(OBJDIR)/graph_print.o: $(GRAPH_DIR)/graph_print.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
