@@ -9,6 +9,7 @@ extern stack_push
 extern stack_pop
 extern stack_is_empty
 extern stack_destroy
+extern graph_reset_visited
 
 global graph_dfs
 
@@ -34,6 +35,10 @@ graph_dfs:
 
     mov     rbx, rdi          ; rbx = Graph* g
     mov     r12, rsi          ; r12 = startVertex
+    
+    ; reset visited state of all vertices
+    mov     rdi, rbx          ; rdi = Graph* g
+    call    graph_reset_visited
 
     ; create stack
     call    stack_create

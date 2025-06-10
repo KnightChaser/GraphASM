@@ -64,8 +64,8 @@ int main(int argc, char *argv[]) {
     graph_add_edge(g, 0, 3);
     printf("Edge (0, 3) added back\n");
 
-    // printf("\nBFS traversal starting from vertex 0:\n");
-    // graph_bfs(g, 0);
+    printf("\nBFS traversal starting from vertex 0:\n");
+    graph_bfs(g, 0);
 
     printf("\nDFS traversal starting from vertex 0:\n");
     graph_dfs(g, 0);

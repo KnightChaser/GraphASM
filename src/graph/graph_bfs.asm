@@ -9,6 +9,7 @@ extern queue_enqueue
 extern queue_dequeue
 extern queue_is_empty
 extern queue_destroy
+extern graph_reset_visited
 
 global graph_bfs
 
@@ -34,6 +35,10 @@ graph_bfs:
 
     mov     rbx, rdi          ; rbx = Graph* g
     mov     r12, rsi          ; r12 = startVertex
+
+    ; reset visited state of all vertices
+    mov     rdi, rbx          ; rdi = Graph* g
+    call    graph_reset_visited
 
     ; create queue
     call    queue_create

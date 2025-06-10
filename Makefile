@@ -11,21 +11,22 @@ STACK_DIR    := $(SRCDIR)/auxiliary/stack
 GRAPH_DIR    := $(SRCDIR)/graph
 OBJDIR       := build
 OBJS         := \
-    $(OBJDIR)/main.o \
-    $(OBJDIR)/queue_create.o      \
-    $(OBJDIR)/queue_dequeue.o     \
-    $(OBJDIR)/queue_enqueue.o     \
-    $(OBJDIR)/queue_utils.o       \
-    $(OBJDIR)/stack_create.o      \
-    $(OBJDIR)/stack_pop.o         \
-    $(OBJDIR)/stack_push.o        \
-    $(OBJDIR)/stack_utils.o       \
-		$(OBJDIR)/graph_add_edge.o    \
-		$(OBJDIR)/graph_bfs.o         \
-		$(OBJDIR)/graph_create.o      \
-		$(OBJDIR)/graph_dfs.o         \
-		$(OBJDIR)/graph_print.o       \
-		$(OBJDIR)/graph_remove_edge.o \
+    $(OBJDIR)/main.o                \
+    $(OBJDIR)/queue_create.o        \
+    $(OBJDIR)/queue_dequeue.o       \
+    $(OBJDIR)/queue_enqueue.o       \
+    $(OBJDIR)/queue_utils.o         \
+    $(OBJDIR)/stack_create.o        \
+    $(OBJDIR)/stack_pop.o           \
+    $(OBJDIR)/stack_push.o          \
+    $(OBJDIR)/stack_utils.o         \
+		$(OBJDIR)/graph_add_edge.o      \
+		$(OBJDIR)/graph_bfs.o           \
+		$(OBJDIR)/graph_create.o        \
+		$(OBJDIR)/graph_dfs.o           \
+		$(OBJDIR)/graph_print.o         \
+		$(OBJDIR)/graph_remove_edge.o   \
+		$(OBJDIR)/graph_reset_visited.o \
 
 
 .PHONY: all clean
@@ -80,21 +81,14 @@ $(OBJDIR)/graph_create.o: $(GRAPH_DIR)/graph_create.asm $(GRAPH_DIR)/structs.inc
 $(OBJDIR)/graph_dfs.o: $(GRAPH_DIR)/graph_dfs.asm $(GRAPH_DIR)/structs.inc $(STACK_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
-
 $(OBJDIR)/graph_print.o: $(GRAPH_DIR)/graph_print.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 $(OBJDIR)/graph_remove_edge.o: $(GRAPH_DIR)/graph_remove_edge.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
-
-
-# # Assemble Graph modules (BFS/DFS placeholders)
-# $(OBJDIR)/graph_bfs.o: $(GRAPH_DIR)/bfs.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
-# 	$(ASM) $(ASMFLAGS) $< -o $@
-# 
-# $(OBJDIR)/graph_dfs.o: $(GRAPH_DIR)/dfs.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
-# 	$(ASM) $(ASMFLAGS) $< -o $@
+$(OBJDIR)/graph_reset_visited.o: $(GRAPH_DIR)/graph_reset_visited.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
+	$(ASM) $(ASMFLAGS) $< -o $@
 
 # Link everything into final binary
 graphasm: $(OBJS)
