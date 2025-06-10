@@ -5,6 +5,40 @@
 
 #define MAX_VERTICES 100
 
+// Stack structure
+typedef struct Stack {
+    int items[MAX_VERTICES];
+    int top;
+} Stack;
+
+Stack *createStack() {
+    Stack *stack = malloc(sizeof(Stack));
+    if (!stack) {
+        fprintf(stderr, "Failed to allocate memory for stack\n");
+        exit(EXIT_FAILURE);
+    }
+    stack->top = -1;
+    return stack;
+}
+
+bool isStackEmpty(Stack *stack) { return stack->top == -1; }
+
+void stackPush(Stack *stack, int value) {
+    if (stack->top >= MAX_VERTICES - 1) {
+        fprintf(stderr, "Stack overflow\n");
+        return;
+    }
+    stack->items[++stack->top] = value;
+}
+
+int stackPop(Stack *stack) {
+    if (isStackEmpty(stack)) {
+        fprintf(stderr, "Stack underflow\n");
+        return -1; // Indicating an error
+    }
+    return stack->items[stack->top--];
+}
+
 // Node in adjacency list
 typedef struct Node {
     int vertex;
@@ -72,15 +106,27 @@ bool removeEdge(Graph *graph, int source, int destination) {
     return removed;
 }
 
-// The DFS routine
-void dfs(Graph *graph, int vertex) {
-    graph->visited[vertex] = true;
-    printf("Visited %d\n", vertex);
-    for (Node *adj = graph->adjLists[vertex]; adj; adj = adj->next) {
-        if (!graph->visited[adj->vertex]) {
-            dfs(graph, adj->vertex);
+// The DFS routine (using stacks)
+void dfs(Graph *graph, int startVertex) {
+    Stack *s = createStack();
+    graph->visited[startVertex] = true;
+    stackPush(s, startVertex);
+
+    while (!isStackEmpty(s)) {
+        int currentVertex = stackPop(s);
+        printf("Visited %d\n", currentVertex);
+
+        // push all unvisited neighbors
+        for (Node *current = graph->adjLists[currentVertex]; current != NULL;
+             current = current->next) {
+            int adjVertex = current->vertex;
+            if (!graph->visited[adjVertex]) {
+                graph->visited[adjVertex] = true;
+                stackPush(s, adjVertex);
+            }
         }
     }
+    free(s); // Free the stack memory
 }
 
 void printGraph(Graph *graph) {
