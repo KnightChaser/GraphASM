@@ -1,77 +1,110 @@
+// main.c
+
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-// == Assembly-implemented routines ==
-// 1) Stack
-typedef struct Stack Stack;
-extern Stack *stack_create(void);
-extern void stack_push(Stack *s, int64_t value);
-extern int64_t stack_pop(Stack *s);
-extern int64_t stack_peek(Stack *s);
-extern long stack_count(Stack *s);
-extern int stack_is_empty(Stack *s);
-extern void stack_print(Stack *s);
-extern void stack_destroy(Stack *s);
-
-// 2) Queue
-typedef struct Queue Queue;
-extern Queue *queue_create(void);
-extern void queue_enqueue(Queue *q, int64_t value);
-extern int64_t queue_dequeue(Queue *q);
-extern int64_t queue_peek(Queue *q);
-extern long queue_count(Queue *q);
-extern int queue_is_empty(Queue *q);
-extern void queue_print(Queue *q);
-extern void queue_destroy(Queue *q);
-
-// 3) Graph
+// Assembly‐implemented routines
 typedef struct Graph Graph;
-extern void graph_add_edge(Graph *g, int64_t src, int64_t dest);
-extern void graph_bfs(Graph *g, int64_t startVertex);
 extern Graph *graph_create(int64_t numVertices);
+extern void graph_add_edge(Graph *g, int64_t src, int64_t dest);
+extern int64_t graph_remove_edge(Graph *g, int64_t src, int64_t dest);
+extern void graph_bfs(Graph *g, int64_t startVertex);
 extern void graph_dfs(Graph *g, int64_t startVertex);
 extern void graph_print(Graph *g);
-extern int64_t graph_remove_edge(Graph *g, int64_t src, int64_t dest);
+extern void graph_reset_visited(Graph *g); // our helper to zero visited[]
+
+static void help(void) {
+    puts("Commands:");
+    puts("  add <u> <v>      — add undirected edge u<->v");
+    puts("  remove <u> <v>   — remove undirected edge u<->v");
+    puts("  bfs <start>      — breadth-first search from start");
+    puts("  dfs <start>      — depth-first search from start");
+    puts("  print            — dump adjacency lists");
+    puts("  help             — show this message");
+    puts("  exit             — quit");
+}
 
 int main(int argc, char *argv[]) {
-    // Create the graph
-    int numVertices = 10;
+    // change as desired
+    const int64_t numVertices = 10;
     Graph *g = graph_create(numVertices);
     if (!g) {
-        fprintf(stderr, "Failed to create graph\n");
+        fprintf(stderr, "ERROR: could not create graph\n");
         return EXIT_FAILURE;
     }
-    printf("Graph with %ld vertices created at %p\n",
-           (long)*(int64_t *)((char *)g), // graph.numVertices RESB 1
-           g);
-    /*
-    0 - 1 - 2
-    |   |
-    3 - 4
-        |
-        5
-    */
-    graph_add_edge(g, 0, 1);
-    graph_add_edge(g, 0, 3);
-    graph_add_edge(g, 1, 2);
-    graph_add_edge(g, 1, 4);
-    graph_add_edge(g, 3, 4);
-    graph_add_edge(g, 4, 5);
-    bool ok = graph_remove_edge(g, 0, 3);
-    printf("Edge (0, 3) removed: %s\n", ok ? "true" : "false");
-    graph_add_edge(g, 0, 3);
-    printf("Edge (0, 3) added back\n");
 
-    printf("\nBFS traversal starting from vertex 0:\n");
-    graph_bfs(g, 0);
+    char line[128];
+    printf("You can add edges from 0 to %ld.\n", numVertices - 1);
+    help();
 
-    printf("\nDFS traversal starting from vertex 0:\n");
-    graph_dfs(g, 0);
+    while (true) {
+        printf("graph> ");
+        if (!fgets(line, sizeof line, stdin))
+            break;
+        line[strcspn(line, "\n")] = '\0';
 
-    printf("\nGraph adjacency list:\n");
-    graph_print(g);
+        if (strncmp(line, "add ", 4) == 0) {
+            // Add a new edge to the graph
+            int64_t u, v;
+            if (sscanf(line + 4, "%ld %ld", &u, &v) == 2) {
+                graph_add_edge(g, u, v);
+                printf("added edge %ld<->%ld\n", u, v);
+            } else {
+                puts("usage: add <u> <v>");
+            }
+
+        } else if (strncmp(line, "remove ", 7) == 0) {
+            // Remove an edge from the graph
+            int64_t u, v;
+            if (sscanf(line + 7, "%ld %ld", &u, &v) == 2) {
+                int64_t ok = graph_remove_edge(g, u, v);
+                printf("removed edge %ld<->%ld: %s\n", u, v, ok ? "yes" : "no");
+            } else {
+                puts("usage: remove <u> <v>");
+            }
+
+        } else if (strncmp(line, "bfs ", 4) == 0) {
+            // Perform a breadth-first search (BFS) to the graph
+            int64_t start;
+            if (sscanf(line + 4, "%ld", &start) == 1) {
+                graph_reset_visited(g);
+                printf("BFS from %ld:\n", start);
+                graph_bfs(g, start);
+            } else {
+                puts("usage: bfs <start>");
+            }
+
+        } else if (strncmp(line, "dfs ", 4) == 0) {
+            // Perform a depth-first search (DFS) to the graph
+            int64_t start;
+            if (sscanf(line + 4, "%ld", &start) == 1) {
+                graph_reset_visited(g);
+                printf("DFS from %ld:\n", start);
+                graph_dfs(g, start);
+            } else {
+                puts("usage: dfs <start>");
+            }
+
+        } else if (strcmp(line, "print") == 0) {
+            // Print the adjacency lists of the graph
+            graph_print(g);
+
+        } else if (strcmp(line, "help") == 0) {
+            // Show the help message
+            help();
+
+        } else if (strcmp(line, "exit") == 0) {
+            // Exit the program
+            printf("Bye! See you next time! >_<\n");
+            break;
+
+        } else if (line[0] != '\0') {
+            printf("unknown command: '%s'\n", line);
+        }
+    }
 
     return EXIT_SUCCESS;
 }
