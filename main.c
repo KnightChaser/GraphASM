@@ -28,10 +28,11 @@ extern void queue_destroy(Queue *q);
 
 // 3) Graph
 typedef struct Graph Graph;
-extern Graph *graph_create(int64_t numVertices);
 extern void graph_add_edge(Graph *g, int64_t src, int64_t dest);
-extern int64_t graph_remove_edge(Graph *g, int64_t src, int64_t dest);
 extern int64_t graph_bfs(Graph *g, int64_t startVertex);
+extern Graph *graph_create(int64_t numVertices);
+extern void graph_print(Graph *g);
+extern int64_t graph_remove_edge(Graph *g, int64_t src, int64_t dest);
 
 int main(int argc, char *argv[]) {
     // Create the graph
@@ -62,7 +63,11 @@ int main(int argc, char *argv[]) {
     graph_add_edge(g, 0, 3);
     printf("Edge (0, 3) added back\n");
 
+    printf("\n");
     graph_bfs(g, 0);
+
+    printf("\n");
+    graph_print(g);
 
     return EXIT_SUCCESS;
 }

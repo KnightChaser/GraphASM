@@ -20,10 +20,11 @@ OBJS         := \
     $(OBJDIR)/stack_pop.o         \
     $(OBJDIR)/stack_push.o        \
     $(OBJDIR)/stack_utils.o       \
-		$(OBJDIR)/graph_create.o      \
 		$(OBJDIR)/graph_add_edge.o    \
-		$(OBJDIR)/graph_remove_edge.o \
 		$(OBJDIR)/graph_bfs.o         \
+		$(OBJDIR)/graph_create.o      \
+		$(OBJDIR)/graph_print.o       \
+		$(OBJDIR)/graph_remove_edge.o \
 
 
 .PHONY: all clean
@@ -66,17 +67,22 @@ $(OBJDIR)/stack_utils.o: $(STACK_DIR)/stack_utils.asm $(STACK_DIR)/structs.inc |
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 # Assemble Graph modules
+$(OBJDIR)/graph_add_edge.o: $(GRAPH_DIR)/graph_add_edge.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
+	$(ASM) $(ASMFLAGS) $< -o $@
+
+$(OBJDIR)/graph_bfs.o: $(GRAPH_DIR)/graph_bfs.asm $(GRAPH_DIR)/structs.inc $(QUEUE_DIR)/structs.inc | $(OBJDIR)
+	$(ASM) $(ASMFLAGS) $< -o $@
+
 $(OBJDIR)/graph_create.o: $(GRAPH_DIR)/graph_create.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
-$(OBJDIR)/graph_add_edge.o: $(GRAPH_DIR)/graph_add_edge.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
+$(OBJDIR)/graph_print.o: $(GRAPH_DIR)/graph_print.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 $(OBJDIR)/graph_remove_edge.o: $(GRAPH_DIR)/graph_remove_edge.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
-$(OBJDIR)/graph_bfs.o: $(GRAPH_DIR)/graph_bfs.asm $(GRAPH_DIR)/structs.inc $(QUEUE_DIR)/structs.inc | $(OBJDIR)
-	$(ASM) $(ASMFLAGS) $< -o $@
+
 
 # # Assemble Graph modules (BFS/DFS placeholders)
 # $(OBJDIR)/graph_bfs.o: $(GRAPH_DIR)/bfs.asm $(GRAPH_DIR)/structs.inc | $(OBJDIR)
