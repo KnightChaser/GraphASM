@@ -10,7 +10,9 @@ global graph_add_edge
 section .text
 ;------------------------------------------------------------------------------
 ; void graph_add_edge(Graph *g, int64_t source, int64_t dest)
-;   – adds an undirected edge: source→dest and dest→source
+;   – adds an undirected edge: source→dest and dest->source
+;   - if source or dest is out of [0, MAX_VERTICES), no-op is returned
+;     (returns immediately and no error is printed)
 ; Args:
 ;   RDI = Graph *g
 ;   RSI = source vertex (0 ≤ source < MAX_VERTICES)
@@ -20,13 +22,19 @@ section .text
 graph_add_edge:
     push    rbp
     mov     rbp, rsp
-    push    rbx             ; preserve Graph *base
-    push    r12             ; preserve source vertex
-    push    r13             ; preserve destination vertex
+    push    rbx                         ; preserve Graph *base
+    push    r12                         ; preserve source vertex
+    push    r13                         ; preserve destination vertex
 
-    mov     rbx, rdi        ; rbx <- Graph *g
-    mov     r12, rsi        ; r12 <- source vertex
-    mov     r13, rdx        ; r13 <- destination vertex
+    mov     rbx, rdi                    ; rbx <- Graph *g
+    mov     r12, rsi                    ; r12 <- source vertex
+    mov     r13, rdx                    ; r13 <- destination vertex
+
+    mov rcx, [rbx + GRAPH_NUM_VERTICES] ; rcx = numVerticies
+    cmp r12, rcx
+    jae .bad_arg                        ; if (source >= numVertices) exit(1)
+    cmp r13, rcx
+    jae .bad_arg                        ; if (dest >= numVertices) exit(1)
 
     ; allocate node for source -> dest
     mov     rdi, ADJNODE_SIZE
@@ -54,6 +62,14 @@ graph_add_edge:
     mov     [rax + ADJNODE_NEXT], rdx              ; set next pointer
     mov     [rbx + GRAPH_ADJ_LISTS + r13 * 8], rax ; adjLists[dest] = new node
 
+    pop     r13
+    pop     r12
+    pop     rbx
+    pop     rbp
+    ret
+
+.bad_arg:
+    ; invalid vertex index -> no-op and return
     pop     r13
     pop     r12
     pop     rbx

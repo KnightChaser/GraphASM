@@ -10,7 +10,8 @@ section .text
 ;------------------------------------------------------------------------------
 ; int64_t graph_remove_edge(Graph *g, int64_t src, int64_t dest)
 ;   – removes edges src->dest and dest->src (undirected)
-;   – returns 1 if any removal succeeded, else 0
+;   – returns 1 if any removal succeeded
+;   - returns 0 if any src or dest is out of [0, MAX_VERTICES) (invalid)
 ; Args:
 ;   RDI = Graph*      (pointer to Graph)
 ;   RSI = src index
@@ -29,6 +30,12 @@ graph_remove_edge:
     mov     r12, rsi        ; r12 <- src index
     mov     r13, rdx        ; r13 <- dest index
     xor     rax, rax        ; rax <- 0 (no edges removed yet)
+
+    mov     rcx, [rbx + GRAPH_NUM_VERTICES] ; rcx = numVertices
+    cmp     r12, rcx
+    jae     .bad_arg       ; if src >= numVertices, exit(1)
+    cmp     r13, rcx
+    jae     .bad_arg       ; if dest >= numVertices, exit(1)
 
     ; helper macro: remomve one direction edge (r12 -> r13) using pptr in %rdx
     %macro REM_DIR 0
@@ -69,3 +76,11 @@ graph_remove_edge:
     pop     rbp
     ret
 
+.bad_arg:
+    ; invalid vertex index -> no-op and return 0
+    pop     r13
+    pop     r12
+    pop     rbx
+    pop     rbp
+    xor     rax, rax  ; rax <- 0 (no edges removed)
+    ret

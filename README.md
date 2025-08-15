@@ -4,8 +4,8 @@
 > Supports creation, edge insertion/removal, BFS, DFS, and adjacency-list dumps without BS.
 
 ### Preview
-![image](https://github.com/user-attachments/assets/d200368e-d143-4d86-973d-40eba5934d6b)
 
+![image](https://github.com/user-attachments/assets/d200368e-d143-4d86-973d-40eba5934d6b)
 
 ### File Structure
 
@@ -38,6 +38,7 @@
         ├── graph_dfs.asm            # DFS traversal
         └── graph_print.asm          # dump adjacency lists
 ```
+
 (`/sketch` directory is not included in this project. It's just an example C source code of BFS/DFS algorithms for undirected graphs represented as adjacency lists. I referenced them before digging into the Assembly implementation.)
 
 ### Build & Run
@@ -56,6 +57,13 @@ make clean && make
 * `print`            — print each adjacency list (`[i] -> v1 -> … -> NULL`)
 * `help`             — show this help message
 * `exit`             — quit the program
+
+### Bounds & Errors
+
+* Vertices are **0 ≤ v < numVertices** (default: 10).
+* `add u v`: if either vertex is out of bounds, the operation is a **no-op** (silent).
+* `remove u v`: returns a boolean (printed by the CLI). If either vertex is out of bounds, it will return **no** (0).
+* `bfs start` / `dfs start`: out-of-bounds `start` is ignored (no traversal).  *(After the upcoming patches.)*
 
 ### License & Contributions
 
