@@ -15,6 +15,7 @@ extern void graph_bfs(Graph *g, int64_t startVertex);
 extern void graph_dfs(Graph *g, int64_t startVertex);
 extern void graph_print(Graph *g);
 extern void graph_reset_visited(Graph *g); // our helper to zero visited[]
+extern void graph_destroy(Graph *g);
 
 static void help(void) {
     puts("Commands:");
@@ -106,5 +107,6 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    graph_destroy(g);
     return EXIT_SUCCESS;
 }
