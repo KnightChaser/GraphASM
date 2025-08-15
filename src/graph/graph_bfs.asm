@@ -20,6 +20,7 @@ section .text
 ;------------------------------------------------------------------------------
 ; void graph_bfs(Graph *g, int64_t startVertex)
 ;   – performs BFS from startVertex, printing each visited vertex
+;   - if startVertex is out of [0, g->numVertices), it will return immediately (no-op)
 ; Args:
 ;   RDI = Graph* pointer
 ;   RSI = startVertex index
@@ -35,6 +36,11 @@ graph_bfs:
 
     mov     rbx, rdi          ; rbx = Graph* g
     mov     r12, rsi          ; r12 = startVertex
+
+    ; bound check
+    mov     rcx, [rbx + GRAPH_NUM_VERTICES]
+    cmp     r12, rcx
+    jae     .bad_arg          ; out of range, no-op
 
     ; reset visited state of all vertices
     mov     rdi, rbx          ; rdi = Graph* g
@@ -105,3 +111,6 @@ graph_bfs:
     pop     rbx
     pop     rbp
     ret
+
+.bad_arg:
+    jmp     .cleanup

@@ -20,6 +20,7 @@ section .text
 ;------------------------------------------------------------------------------
 ; void graph_dfs(Graph *g, int64_t startVertex)
 ;   – iterative DFS using your stack_*
+;   - if startVertex is out of [0, g->numVertices), it will return immediately (no-op)
 ; Args:
 ;   RDI = Graph* pointer
 ;   RSI = startVertex index
@@ -35,7 +36,13 @@ graph_dfs:
 
     mov     rbx, rdi          ; rbx = Graph* g
     mov     r12, rsi          ; r12 = startVertex
-    
+
+    ; bound check
+    mov     rcx, [rbx + GRAPH_NUM_VERTICES]
+    cmp     r12, rcx
+    jae     .bad_arg          ; out of range, no-op
+
+
     ; reset visited state of all vertices
     mov     rdi, rbx          ; rdi = Graph* g
     call    graph_reset_visited
@@ -106,3 +113,6 @@ graph_dfs:
     pop     rbx
     pop     rbp
     ret
+
+.bad_arg:
+    jmp     .cleanup

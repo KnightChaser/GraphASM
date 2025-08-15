@@ -63,7 +63,7 @@ make clean && make
 * Vertices are **0 ≤ v < numVertices** (default: 10).
 * `add u v`: if either vertex is out of bounds, the operation is a **no-op** (silent).
 * `remove u v`: returns a boolean (printed by the CLI). If either vertex is out of bounds, it will return **no** (0).
-* `bfs start` / `dfs start`: out-of-bounds `start` is ignored (no traversal).  *(After the upcoming patches.)*
+* `bfs start` / `dfs start`: if `start` is out of bounds, the traversal is a **no-op** (silent).
 
 ### License & Contributions
 
