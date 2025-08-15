@@ -11,19 +11,19 @@
 
 ```
 .
-├── Makefile               # build rules (NASM + GCC)
-├── main.c                 # interactive CLI in C
-├── README.md              # this documentation
+├── Makefile                         # build rules (NASM + GCC)
+├── main.c                           # interactive CLI in C
+├── README.md                        # this documentation
 └── src
     ├── auxiliary
     │   ├── queue
-    │   │   ├── structs.inc       # Queue struct offsets
+    │   │   ├── structs.inc          # Queue struct offsets
     │   │   ├── queue_create.asm
     │   │   ├── queue_enqueue.asm
     │   │   ├── queue_dequeue.asm
     │   │   └── queue_utils.asm
     │   └── stack
-    │       ├── structs.inc       # Stack struct offsets
+    │       ├── structs.inc          # Stack struct offsets
     │       ├── stack_create.asm
     │       ├── stack_push.asm
     │       ├── stack_pop.asm
@@ -31,6 +31,7 @@
     └── graph
         ├── structs.inc              # Graph & AdjNode layouts
         ├── graph_create.asm         # malloc & init Graph
+        ├── graph_destroy.asm        # free Graph & AdjNodes
         ├── graph_add_edge.asm       # insert undirected edge
         ├── graph_remove_edge.asm    # remove undirected edge
         ├── graph_reset_visited.asm  # zero out visited[] (internal utility)
