@@ -29,12 +29,12 @@ endstruc
 %define MAX_VERTICES 1024
 
 struc Graph
-    .numVerticies    resq    1            ; 8 bytes: Number of vertices (int64_t)
+    .numVertices     resq    1            ; 8 bytes: Number of vertices (int64_t)
     .adjLists        resq    MAX_VERTICES ; 8 bytes each: Array of pointers to adjacency lists (AdjNode*)
     .visited         resb    MAX_VERTICES ; 1 byte each: Visited flags for each vertex
 endstruc
 
-%define GRAPH_NUM_VERTICES  Graph.numVerticies
+%define GRAPH_NUM_VERTICES  Graph.numVertices
 %define GRAPH_ADJ_LISTS     Graph.adjLists
 %define GRAPH_VISITED       Graph.visited
 
