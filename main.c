@@ -28,6 +28,8 @@ static void help(void) {
     puts("  exit             — quit");
 }
 
+static inline int in_range(long v, long n) { return (v >= 0 && v < n); }
+
 int main(int argc, char *argv[]) {
     // change as desired
     const int64_t numVertices = 10;
@@ -51,8 +53,12 @@ int main(int argc, char *argv[]) {
             // Add a new edge to the graph
             int64_t u, v;
             if (sscanf(line + 4, "%ld %ld", &u, &v) == 2) {
-                graph_add_edge(g, u, v);
-                printf("added edge %ld<->%ld\n", u, v);
+                if (!in_range(u, numVertices) || !in_range(v, numVertices)) {
+                    puts("error: vertex out of range");
+                } else {
+                    graph_add_edge(g, u, v);
+                    printf("added edge %ld<->%ld\n", u, v);
+                }
             } else {
                 puts("usage: add <u> <v>");
             }
@@ -61,8 +67,13 @@ int main(int argc, char *argv[]) {
             // Remove an edge from the graph
             int64_t u, v;
             if (sscanf(line + 7, "%ld %ld", &u, &v) == 2) {
-                int64_t ok = graph_remove_edge(g, u, v);
-                printf("removed edge %ld<->%ld: %s\n", u, v, ok ? "yes" : "no");
+                if (!in_range(u, numVertices) || !in_range(v, numVertices)) {
+                    puts("removed edge (out of range): no");
+                } else {
+                    int64_t ok = graph_remove_edge(g, u, v);
+                    printf("removed edge %ld<->%ld: %s\n", u, v,
+                           ok ? "yes" : "no");
+                }
             } else {
                 puts("usage: remove <u> <v>");
             }
@@ -71,8 +82,12 @@ int main(int argc, char *argv[]) {
             // Perform a breadth-first search (BFS) to the graph
             int64_t start;
             if (sscanf(line + 4, "%ld", &start) == 1) {
-                printf("BFS from %ld:\n", start);
-                graph_bfs(g, start);
+                if (!in_range(start, numVertices)) {
+                    puts("error: start vertex out of range");
+                } else {
+                    printf("BFS from %ld:\n", start);
+                    graph_bfs(g, start);
+                }
             } else {
                 puts("usage: bfs <start>");
             }
@@ -81,8 +96,12 @@ int main(int argc, char *argv[]) {
             // Perform a depth-first search (DFS) to the graph
             int64_t start;
             if (sscanf(line + 4, "%ld", &start) == 1) {
-                printf("DFS from %ld:\n", start);
-                graph_dfs(g, start);
+                if (!in_range(start, numVertices)) {
+                    puts("error: start vertex out of range");
+                } else {
+                    printf("DFS from %ld:\n", start);
+                    graph_dfs(g, start);
+                }
             } else {
                 puts("usage: dfs <start>");
             }
