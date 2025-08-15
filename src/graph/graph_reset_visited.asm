@@ -1,4 +1,4 @@
-; src/graph/grpah_reset_visited.asm
+; src/graph/graph_reset_visited.asm
 
 %include "src/graph/structs.inc"
 

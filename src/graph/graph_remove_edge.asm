@@ -37,7 +37,7 @@ graph_remove_edge:
     cmp     r13, rcx
     jae     .bad_arg       ; if dest >= numVertices, exit(1)
 
-    ; helper macro: remomve one direction edge (r12 -> r13) using pptr in %rdx
+    ; helper macro: remove one direction edge (r12 -> r13) using pptr in %rdx
     %macro REM_DIR 0
         lea    rdx, [rbx + GRAPH_ADJ_LISTS + r12 * 8] ; rdx = &g->adjLists[src]
     %%remove_loop:

@@ -29,7 +29,7 @@ graph_bfs:
     push    rbp
     mov     rbp, rsp
     push    rbx               ; preserve %rbx, will hold Graph*
-    push    r12               ; perserve %r12, will hold startVertex
+    push    r12               ; preserve %r12, will hold startVertex
     push    r13               ; preserve %r13, will hold Queue*
     push    r14               ; preserve %r14, will hold the current vertex (during loop)
     push    r15               ; preserve %r15, will hold the adjacency cursor

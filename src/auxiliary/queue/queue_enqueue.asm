@@ -21,7 +21,6 @@ queue_enqueue:
     mov     rbx, rdi  ; rbx <- q* (queue pointer)
     mov     rdx, rsi  ; rdx <- value
 
-    mov     rdx, rsi  ; rdx = value
     push    rdx       ; Save value on stack because malloc() modifies rdx
 
     ; malloc a new node

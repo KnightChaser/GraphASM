@@ -28,7 +28,7 @@ section .text
 queue_count:
     push    rbp
     mov     rbp, rsp
-    mov     rax, [rdi + Queue.count]  ; Load the count from the Queue structure
+    mov     rax, [rdi + QUEUE_COUNT]  ; Load the count from the Queue structure
     pop     rbp
     ret
 

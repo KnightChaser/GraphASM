@@ -22,7 +22,7 @@ stack_pop:
     push    rbx         ; save RBX for stack pointer
     mov     rbx, rdi    ; rbx <- s (Stack *)
 
-    ; lead top node pointer
+    ; load top node pointer
     mov     rax, [rbx + STACK_TOP]
     test    rax, rax
     je      .underflow
