@@ -25,6 +25,13 @@ graph_create:
     push    r12             ; preserve %r12, will hold the Graph pointer (Graph *)
  
     mov     rbx, rdi        ; rbx <- number of vertices
+
+    ; bounds check
+    test    rbx, rbx
+    js      .bad_arg        ; negative(signed) -> null
+    cmp     rbx, MAX_VERTICES
+    ja      .bad_arg        ; too many vertices -> null
+
     mov     rdi, GRAPH_SIZE
     call    malloc
     test    rax, rax
@@ -74,3 +81,10 @@ graph_create:
 .oom:
     mov     rdi, 1
     call    exit
+
+.bad_arg: 
+    xor     rax, rax        ; return NULL
+    pop     r12             ; restore %r12
+    pop     rbx             ; restore %rbx
+    pop     rbp
+    ret

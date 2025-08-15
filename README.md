@@ -61,6 +61,8 @@ make clean && make
 ### Bounds & Errors
 
 * Vertices are **0 ≤ v < numVertices** (default: 10).
+* `graph_create(n)`: returns `NULL` if `n < 0` or `n > MAX_VERTICES` (assembly layer stays silent).
+
 * `add u v`: if either vertex is out of bounds, the operation is a **no-op** (silent).
 * `remove u v`: returns a boolean (printed by the CLI). If either vertex is out of bounds, it will return **no** (0).
 * `bfs start` / `dfs start`: if `start` is out of bounds, the traversal is a **no-op** (silent).
