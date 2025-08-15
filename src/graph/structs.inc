@@ -37,7 +37,21 @@ endstruc
 %define GRAPH_NUM_VERTICES  Graph.numVerticies
 %define GRAPH_ADJ_LISTS     Graph.adjLists
 %define GRAPH_VISITED       Graph.visited
-%define GRAPH_SIZE          9224 ; Size of Graph structure in bytes
-   ; 8 bytes for numVerticies
-   ; 8 * MAX_VERTICES bytes for adjLists (8 * 1024 = 8192)
-   ; MAX_VERTICES bytes for visited boolean flags (1 byte each)
+
+; 8 bytes for numVertices 
+;   + (8 * MAX_VERTICES) for adj ptrs 
+;   + (1 * MAX_VERTICES) for visited flags
+%define GRAPH_SIZE (8 + 9 * MAX_VERTICES)
+
+; --- Optional sanity checks (fail fast if someone edits struct layout) ---
+%if GRAPH_ADJ_LISTS != 8
+    %error "GRAPH_ADJ_LISTS offset changed (expected 8)"
+%endif
+
+%if GRAPH_VISITED != (8 + 8 * MAX_VERTICES)
+    %error "GRAPH_VISITED offset mismatch (expected 8 + 8 * MAX_VERTICES)"
+%endif
+
+%if GRAPH_SIZE != (8 + 8 * MAX_VERTICES + MAX_VERTICES)
+    %error "GRAPH_SIZE formula mismatch"
+%endif
