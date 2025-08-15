@@ -71,7 +71,6 @@ int main(int argc, char *argv[]) {
             // Perform a breadth-first search (BFS) to the graph
             int64_t start;
             if (sscanf(line + 4, "%ld", &start) == 1) {
-                graph_reset_visited(g);
                 printf("BFS from %ld:\n", start);
                 graph_bfs(g, start);
             } else {
@@ -82,7 +81,6 @@ int main(int argc, char *argv[]) {
             // Perform a depth-first search (DFS) to the graph
             int64_t start;
             if (sscanf(line + 4, "%ld", &start) == 1) {
-                graph_reset_visited(g);
                 printf("DFS from %ld:\n", start);
                 graph_dfs(g, start);
             } else {
